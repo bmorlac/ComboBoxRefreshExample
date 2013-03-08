@@ -1,40 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="js/jquery-1.9.1.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script>
 </head>
 
 <body>
 <script>
 $(function() {
-  console.log("dom ready");
-  
-  $('#actresses').change(function() {
-    $.ajax({type: 'POST', url: 'controller.php', data: {actress: this.value}, success: function(data) {
+  $('#actresses,#responseType').change(function() {
+    $.ajax({type: 'POST', url: 'controller.php', data: {actress: $('#actresses').val()}, success: function(data) {
       console.log(data);
       
-      var json = $.parseJSON(data);
-      console.log(json.movies);
-      
-      $('#movies').empty();
-      $.each(json.movies, function(i, movie) {
-        $('#movies').append('<option>'+movie+'</option>');
-      });
-    }});
+	  if ($.isPlainObject(data)) {
+		console.log(data.movies);
+		$('#movies').empty();
+        $.each(data.movies, function(i, movie) {
+          $('#movies').append('<option>'+movie+'</option>');
+        });
+		$('#message').hide();
+	  }
+	  else {
+	    //$('#message').html(data).show().effect("bounce");
+	    $('#message').html(data).show().effect('highlight', {color: '#f99'});
+	  }
+    }, dataType: $('#responseType').val()});
   }).change();
-
 });
 </script>
 
+<div id="message"></div>
+
+<p><label for="responseType">Response Type</label>
+<select id="responseType">
+  <option>text</option>
+  <option>json</option>
+</select></p>
+
+<p><label for="actresses">Actresses</label>
 <select id="actresses">
   <option>Megan Fox</option>
   <option>Jessica Alba</option>
   <option>Kate Beckinsale</option>
   <option>Milla Jovovich</option>
   <option>Olivia Wilde</option>
-</select>
-  
-<select id="movies"></select>
+</select></p>
+
+<p><label for="movies">Movies</label>
+<select id="movies"></select></p>
 
 </body>
 
