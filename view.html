@@ -11,10 +11,17 @@ $(function() {
   
   $('#actresses').change(function() {
     $.ajax({type: 'POST', url: 'controller.php', data: {actress: this.value}, success: function(data) {
-	  console.log(data);
-	  $('#movies').replaceWith('<select id="movies"><option>'+data+'</option></select>');
+      console.log(data);
+      
+      var json = $.parseJSON(data);
+      console.log(json.movies);
+      
+      $('#movies').empty();
+      $.each(json.movies, function(i, movie) {
+        $('#movies').append('<option>'+movie+'</option>');
+      });
     }});
-  });
+  }).change();
 
 });
 </script>
