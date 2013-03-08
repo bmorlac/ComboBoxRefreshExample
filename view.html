@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="js/jquery-1.9.1.js"></script>
+</head>
+
+<body>
+<script>
+$(function() {
+  console.log("dom ready");
+  
+  $('#actresses').change(function() {
+    $.ajax({type: 'POST', url: 'controller.php', data: {actress: this.value}, success: function(data) {
+	  console.log(data);
+	  $('#movies').replaceWith('<select id="movies"><option>'+data+'</option></select>');
+    }});
+  });
+
+});
+</script>
+
+<select id="actresses">
+  <option>Megan Fox</option>
+  <option>Jessica Alba</option>
+  <option>Kate Beckinsale</option>
+  <option>Milla Jovovich</option>
+  <option>Olivia Wilde</option>
+</select>
+  
+<select id="movies"></select>
+
+</body>
+
+</html>
